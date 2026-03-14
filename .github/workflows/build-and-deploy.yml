@@ -30,5 +30,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy $OUTPUT_DIRECTORY --project-name=$CLOUDFLARE_PAGES_PROJECT_NAME
+          command: pages deploy ${{ env.OUTPUT_DIRECTORY }} --project-name=${{ env.CLOUDFLARE_PAGES_PROJECT_NAME }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
