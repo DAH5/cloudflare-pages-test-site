@@ -1,0 +1,34 @@
+name: Build Static Site with StaticPHP
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      CLOUDFLARE_PAGES_PROJECT_NAME: cloudflare-pages-test-site
+      OUTPUT_DIRECTORY: public
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Build Site using StaticPHP
+        run: php StaticPHP-Launcher.php
+      
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy $OUTPUT_DIRECTORY --project-name=$CLOUDFLARE_PAGES_PROJECT_NAME
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
